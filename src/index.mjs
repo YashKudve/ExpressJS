@@ -5,9 +5,14 @@ const app = express()
 const PORT = process.env.PORT || 3000;
 
 const mockUsers = [
-    {id: 1, username:'User1', age:21},
-    {id: 2, username:'User22', age:23},
-    {id: 3, username:'User333', age:22},
+    {id: 1, username:'yash', displayName: 'YASH',age:21},
+    {id: 2, username:'chandan', displayName: 'CHANDAN',age:20},
+    {id: 3, username:'ameya', displayName: 'AMEYA',age:26},
+    {id: 4, username:'aniket', displayName: 'ANIKET',age:19},
+    {id: 5, username:'shivam', displayName: 'SHIVAM',age:20},
+    {id: 6, username:'shubham', displayName: 'SHUBHAM',age:22},
+    {id: 7, username:'ashish', displayName: 'ASHISH',age:23},
+
 ]
 
 // app.get('/', (req,res)=>{
@@ -15,8 +20,12 @@ const mockUsers = [
 //     // res.send('Hello world')
 // })
 
+// app.get("/api/users", (req,res)=>{
+//     res.send(mockUsers)
+// })
 app.get("/api/users", (req,res)=>{
-    res.send(mockUsers)
+    console.log(req.query);
+    // res.send(mockUsers)
 })
 
 app.get("/api/users/:id", (req,res)=>{
