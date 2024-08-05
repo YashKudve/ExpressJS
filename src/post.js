@@ -19,7 +19,13 @@ const mockUsers = [
 
 app.post('/api/users', (req, res)=>{
     console.log(req.body);
-    return res.send(200)
+
+    const {body} = req;
+
+    const newUser = {id: mockUsers[mockUsers.length - 1].id + 1, ...body}
+    mockUsers.push(newUser)
+    return res.status(201).send(mockUsers)
+
     
 })
 
