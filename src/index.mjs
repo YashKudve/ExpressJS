@@ -23,9 +23,23 @@ const mockUsers = [
 // app.get("/api/users", (req,res)=>{
 //     res.send(mockUsers)
 // })
-app.get("/api/users", (req,res)=>{
+
+// app.get("/api/users", (req,res)=>{
+//     console.log(req.query);
+//     res.send(mockUsers)
+// })
+
+app.get('/api/users', (req,res)=>{
     console.log(req.query);
-    // res.send(mockUsers)
+    const {query: {filter, value}} = req;
+
+    if(!filter && !value) return res.send(mockUsers);
+
+    if(filter && value)
+        return res.send(mockUsers.filter((user)=>user[filter].includes(value)));
+    
+    return res.send(mockUsers)
+    
 })
 
 app.get("/api/users/:id", (req,res)=>{
@@ -35,7 +49,7 @@ app.get("/api/users/:id", (req,res)=>{
 
     if (isNaN(parsedId)) {
         return res.status(400).send(`Bad Request:: Invalid ID`)
-    } 
+    }
 
     const findUser = mockUsers.find((user)=>user.id === parsedId)
 
