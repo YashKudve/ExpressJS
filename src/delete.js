@@ -15,20 +15,6 @@ const mockUsers = [
 
 ]
 
-// app.get('/', (req,res)=>{
-//     res.sendStatus(501).send(`Hello`);
-//     // res.send('Hello world')
-// })
-
-// app.get("/api/users", (req,res)=>{
-//     res.send(mockUsers)
-// })
-
-// app.get("/api/users", (req,res)=>{
-//     console.log(req.query);
-//     res.send(mockUsers)
-// })
-
 app.get('/api/users', (req,res)=>{
     console.log(req.query);
     const {query: {filter, value}} = req;
@@ -43,7 +29,6 @@ app.get('/api/users', (req,res)=>{
 })
 
 app.get("/api/users/:id", (req,res)=>{
-    // console.log(req.params);
     const parsedId = parseInt(req.params.id)    
     console.log(parsedId);
 
@@ -72,6 +57,18 @@ app.patch("/api/users/:id", (req,res)=>{
 
     return res.sendStatus(200)
 })
+
+app.delete("/api/users/:id", (req, res) => {
+	const {
+		params: { id },
+	} = req;
+	const parsedId = parseInt(id);
+	if (isNaN(parsedId)) return response.sendStatus(400);
+	const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
+	if (findUserIndex === -1) return res.sendStatus(404);
+	mockUsers.splice(findUserIndex, 1);
+	return res.sendStatus(200);
+});
  
 app.listen(PORT,()=>{
     console.log(`Running on Port ${PORT}`)

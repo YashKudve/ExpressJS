@@ -29,7 +29,7 @@ app.post("/api/users", (req, res)=>{
 })
 
 app.put("/api/users/:id", (req, res)=>{
-    const {body, params:{id}} = request;
+    const {body, params:{id}} = req;
 
     const parsedId = parseInt(id);
     if(isNaN(parsedId)) res.sendStatus(400);
