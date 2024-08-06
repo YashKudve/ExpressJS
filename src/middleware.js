@@ -1,8 +1,14 @@
 import express from 'express'
-
 const app = express()
 
 const PORT = process.env.PORT || 3000;
+
+const loggingMiddleware = (req, res, next) =>{
+    console.log(`${req.method}: ${req.url}`);
+    next()
+}
+
+app.use(loggingMiddleware)
 
 const mockUsers = [
     {id: 1, username:'yash', displayName: 'YASH',age:21},
@@ -14,6 +20,20 @@ const mockUsers = [
     {id: 7, username:'ashish', displayName: 'ASHISH',age:23},
 
 ]
+
+// app.get('/', (req,res)=>{
+//     res.sendStatus(501).send(`Hello`);
+//     // res.send('Hello world')
+// })
+
+// app.get("/api/users", (req,res)=>{
+//     res.send(mockUsers)
+// })
+
+// app.get("/api/users", (req,res)=>{
+//     console.log(req.query);
+//     res.send(mockUsers)
+// })
 
 app.get('/api/users', (req,res)=>{
     console.log(req.query);
@@ -29,6 +49,7 @@ app.get('/api/users', (req,res)=>{
 })
 
 app.get("/api/users/:id", (req,res)=>{
+    // console.log(req.params);
     const parsedId = parseInt(req.params.id)    
     console.log(parsedId);
 
@@ -57,18 +78,6 @@ app.patch("/api/users/:id", (req,res)=>{
 
     return res.sendStatus(200)
 })
-
-app.delete("/api/users/:id", (req, res) => {
-	const {
-		params: { id },
-	} = req;
-	const parsedId = parseInt(id);
-	if (isNaN(parsedId)) return response.sendStatus(400);
-	const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
-	if (findUserIndex === -1) return res.sendStatus(404);
-	mockUsers.splice(findUserIndex, 1);
-	return res.sendStatus(200);
-});
  
 app.listen(PORT,()=>{
     console.log(`Running on Port ${PORT}`)
