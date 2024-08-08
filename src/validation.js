@@ -1,5 +1,5 @@
 import express from 'express'
-import { query,validationResult } from 'express-validator';
+import { query,validationResult, body } from 'express-validator';
 const app = express()
 
 const PORT = process.env.PORT || 3000;
@@ -83,6 +83,26 @@ app.get("/api/users/:id", (req,res)=>{
 
     return res.send(findUser)
     
+})
+
+app.post('/api/users',
+    [
+        body("username").notEmpty().withMessage("Username cannot be empty")
+        .isLength({min:3 , max:32}).withMessage('Should be between 3-32 characters')
+        .isString().withMessage('Username must be string'),
+        body("displayName").notEmpty(),
+    ],
+    (req, res)=>{
+    // console.log(req.body);
+    const result = validationResult(req)
+    console.log(result);
+    
+
+    const {body} = req;
+
+    const newUser = {id: mockUsers[mockUsers.length - 1].id + 1, ...body}
+    mockUsers.push(newUser)
+    return res.status(201).send(mockUsers)
 })
 
 app.patch("/api/users/:id", (req,res)=>{
