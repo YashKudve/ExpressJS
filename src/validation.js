@@ -1,5 +1,5 @@
 import express from 'express'
-import { query } from 'express-validator';
+import { query,validationResult } from 'express-validator';
 const app = express()
 
 const PORT = process.env.PORT || 3000;
@@ -45,9 +45,18 @@ app.get("/",(req,res, next)=>{
 }
 )
 
-app.get('/api/users',query('filter').isString().notEmpty(), (req,res)=>{
+app.get('/api/users',
+    query('filter')
+    .isString()
+    .notEmpty().withMessage('Cannot be empty')
+    .isLength({min:3, max:10}).withMessage('should be between 3-10 characters'),
+     (req,res)=>{
     // console.log(req.query);
     console.log(req["express-validator#contexts"]);
+
+    const result = validationResult(req);
+    console.log(result);
+    
     const {query: {filter, value}} = req;
 
     if(!filter && !value) return res.send(mockUsers);
