@@ -1,5 +1,5 @@
-import express from 'express'
-import { query,validationResult, body } from 'express-validator';
+import express, { response } from 'express'
+import { query,validationResult, body, matchedData } from 'express-validator';
 const app = express()
 
 const PORT = process.env.PORT || 3000;
@@ -96,13 +96,18 @@ app.post('/api/users',
     // console.log(req.body);
     const result = validationResult(req)
     console.log(result);
+
+    if(!result.isEmpty())
+        return res.status(400).send({errors: result.array()});
+
+    const data  = matchedData(req);
+    console.log(data);
     
+    // const {body} = req;
 
-    const {body} = req;
-
-    const newUser = {id: mockUsers[mockUsers.length - 1].id + 1, ...body}
+    const newUser = {id: mockUsers[mockUsers.length - 1].id + 1, ...data}
     mockUsers.push(newUser)
-    return res.status(201).send(mockUsers)
+    return res.status(201).send(newUser)
 })
 
 app.patch("/api/users/:id", (req,res)=>{
