@@ -1,9 +1,12 @@
 import express, { response } from 'express'
 import { query,validationResult, body, matchedData, checkSchema } from 'express-validator';
 import {createUserValidationSchema} from '../utils/validationSchemas.mjs' 
+import usersRouter from './routes/user.mjs'
 
+const app = express();
 
-const app = express()
+app.use(express.json())
+app.use(usersRouter)
 
 const PORT = process.env.PORT || 3000;
 
@@ -48,28 +51,28 @@ app.get("/",(req,res, next)=>{
 }
 )
 
-app.get('/api/users',
-    query('filter')
-    .isString()
-    .notEmpty().withMessage('Cannot be empty')
-    .isLength({min:3, max:10}).withMessage('should be between 3-10 characters'),
-     (req,res)=>{
-    // console.log(req.query);
-    console.log(req["express-validator#contexts"]);
+// app.get('/api/users',
+//     query('filter')
+//     .isString()
+//     .notEmpty().withMessage('Cannot be empty')
+//     .isLength({min:3, max:10}).withMessage('should be between 3-10 characters'),
+//      (req,res)=>{
+//     // console.log(req.query);
+//     console.log(req["express-validator#contexts"]);
 
-    const result = validationResult(req);
-    console.log(result);
+//     const result = validationResult(req);
+//     console.log(result);
     
-    const {query: {filter, value}} = req;
+//     const {query: {filter, value}} = req;
 
-    if(!filter && !value) return res.send(mockUsers);
+//     if(!filter && !value) return res.send(mockUsers);
 
-    if(filter && value)
-        return res.send(mockUsers.filter((user)=>user[filter].includes(value)));
+//     if(filter && value)
+//         return res.send(mockUsers.filter((user)=>user[filter].includes(value)));
     
-    return res.send(mockUsers)
+//     return res.send(mockUsers)
     
-})
+// })
 
 app.get("/api/users/:id", (req,res)=>{
     // console.log(req.params);
