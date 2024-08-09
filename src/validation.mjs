@@ -75,40 +75,40 @@ app.get("/",(req,res, next)=>{
     
 // })
 
-app.get("/api/users/:id", (req,res)=>{
-    // console.log(req.params);
-    const parsedId = parseInt(req.params.id)    
-    console.log(parsedId);
+// app.get("/api/users/:id", (req,res)=>{
+//     // console.log(req.params);
+//     const parsedId = parseInt(req.params.id)    
+//     console.log(parsedId);
 
-    if (isNaN(parsedId)) {
-        return res.status(400).send(`Bad Request:: Invalid ID`)
-    }
+//     if (isNaN(parsedId)) {
+//         return res.status(400).send(`Bad Request:: Invalid ID`)
+//     }
 
-    const findUser = mockUsers.find((user)=>user.id === parsedId)
+//     const findUser = mockUsers.find((user)=>user.id === parsedId)
 
-    if(!findUser) return res.send(`User not found`);
+//     if(!findUser) return res.send(`User not found`);
 
-    return res.send(findUser)
+//     return res.send(findUser)
     
-})
+// })
 
-app.post('/api/users',checkSchema(createUserValidationSchema),(req, res)=>{
-    // console.log(req.body);
-    const result = validationResult(req)
-    console.log(result);
+// app.post('/api/users',checkSchema(createUserValidationSchema),(req, res)=>{
+//     // console.log(req.body);
+//     const result = validationResult(req)
+//     console.log(result);
 
-    if(!result.isEmpty())
-        return res.status(400).send({errors: result.array()});
+//     if(!result.isEmpty())
+//         return res.status(400).send({errors: result.array()});
 
-    const data  = matchedData(req);
-    console.log(data);
+//     const data  = matchedData(req);
+//     console.log(data);
     
-    // const {body} = req;
+//     // const {body} = req;
 
-    const newUser = {id: mockUsers[mockUsers.length - 1].id + 1, ...data}
-    mockUsers.push(newUser)
-    return res.status(201).send(newUser)
-})
+//     const newUser = {id: mockUsers[mockUsers.length - 1].id + 1, ...data}
+//     mockUsers.push(newUser)
+//     return res.status(201).send(newUser)
+// })
 
 app.patch("/api/users/:id", (req,res)=>{
     const {body, params:{id}} = req;

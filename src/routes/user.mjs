@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { query, validationResult } from "express-validator";
+import { query, validationResult, checkSchema, matchedData } from "express-validator";
 import { mockUsers } from "../utils/constants.mjs";
+import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
 
 const router = Router();
 
@@ -25,6 +26,41 @@ router.get('/api/users',
     
     return res.send(mockUsers)
     
+})
+
+router.get("/api/users/:id", (req,res)=>{
+    // console.log(req.params);
+    const parsedId = parseInt(req.params.id)    
+    console.log(parsedId);
+
+    if (isNaN(parsedId)) {
+        return res.status(400).send(`Bad Request:: Invalid ID`)
+    }
+
+    const findUser = mockUsers.find((user)=>user.id === parsedId)
+
+    if(!findUser) return res.send(`User not found`);
+
+    return res.send(findUser)
+    
+})
+
+router.post('/api/users',checkSchema(createUserValidationSchema),(req, res)=>{
+    // console.log(req.body);
+    const result = validationResult(req)
+    console.log(result);
+
+    if(!result.isEmpty())
+        return res.status(400).send({errors: result.array()});
+
+    const data  = matchedData(req);
+    console.log(data);
+    
+    // const {body} = req;
+
+    const newUser = {id: mockUsers[mockUsers.length - 1].id + 1, ...data}
+    mockUsers.push(newUser)
+    return res.status(201).send(newUser)
 })
 
 export default router;
