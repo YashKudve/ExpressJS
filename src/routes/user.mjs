@@ -2,6 +2,7 @@ import { Router } from "express";
 import { query, validationResult, checkSchema, matchedData } from "express-validator";
 import { mockUsers } from "../utils/constants.mjs";
 import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
+import {resolveIndexByUserId} from '../utils/middlewares.mjs'
 
 const router = Router();
 
@@ -28,7 +29,7 @@ router.get('/api/users',
     
 })
 
-router.get("/api/users/:id", (req,res)=>{
+router.get("/api/users/:id",resolveIndexByUserId, (req,res)=>{
     // console.log(req.params);
     const parsedId = parseInt(req.params.id)    
     console.log(parsedId);
@@ -63,4 +64,37 @@ router.post('/api/users',checkSchema(createUserValidationSchema),(req, res)=>{
     return res.status(201).send(newUser)
 })
 
+router.patch("/api/users/:id", (req,res)=>{
+    const {body, params:{id}} = req;
+
+    const parsedId = parseInt(id);
+    if(isNaN(parsedId)) res.sendStatus(400);
+
+    const findUserIndex = mockUsers.findIndex((user)=>user.id === parsedId)
+
+    if(findUserIndex === -1) return res.sendStatus(404);
+
+    mockUsers[findUserIndex] = {...mockUsers[findUserIndex], ...body}
+
+    return res.sendStatus(200)
+})
+
+router.put("/api/users/:id",resolveIndexByUserId, (req, res)=>{
+    const {body,findUserIndex} = req;
+
+    mockUsers[findUserIndex] = {id: mockUsers[findUserIndex].id, ...body}
+    return res.sendStatus(200)
+})
+
+router.delete("/api/users/:id", (req, res) => {
+	const {
+		params: { id },
+	} = req;
+	const parsedId = parseInt(id);
+	if (isNaN(parsedId)) return response.sendStatus(400);
+	const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
+	if (findUserIndex === -1) return res.sendStatus(404);
+	mockUsers.splice(findUserIndex, 1);
+	return res.sendStatus(200);
+});
 export default router;

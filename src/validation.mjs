@@ -3,6 +3,7 @@ import { query,validationResult, body, matchedData, checkSchema } from 'express-
 // import {createUserValidationSchema} from '../utils/validationSchemas.mjs'
 import {createUserValidationSchema} from './utils/validationSchemas.mjs'
 import usersRouter from './routes/user.mjs'
+import {resolveIndexByUserId} from './utils/middlewares.mjs'
 
 const app = express();
 
@@ -18,18 +19,18 @@ const loggingMiddleware = (req, res, next) =>{
 
 // app.use(loggingMiddleware)
 
-const resolveIndexByUserId = (req,res,next) =>{
-    const {body, params:{id}} = req;
+// const resolveIndexByUserId = (req,res,next) =>{
+//     const {body, params:{id}} = req;
 
-    const parsedId = parseInt(id);
-    if(isNaN(parsedId)) res.sendStatus(400);
+//     const parsedId = parseInt(id);
+//     if(isNaN(parsedId)) res.sendStatus(400);
 
-    const findUserIndex = mockUsers.findIndex((user)=>user.id === parsedId)
+//     const findUserIndex = mockUsers.findIndex((user)=>user.id === parsedId)
 
-    if(findUserIndex === -1) return res.sendStatus(404);
+//     if(findUserIndex === -1) return res.sendStatus(404);
 
-    req.findUserIndex = findUserIndex;
-}
+//     req.findUserIndex = findUserIndex;
+// }
 
 
 const mockUsers = [
