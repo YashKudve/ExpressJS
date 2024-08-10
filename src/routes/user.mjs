@@ -13,7 +13,18 @@ router.get('/api/users',
     .isLength({min:3, max:10}).withMessage('should be between 3-10 characters'),
      (req,res)=>{
     // console.log(req.query);
-    console.log(req["express-validator#contexts"]);
+    // console.log(req["express-validator#contexts"]);
+
+    console.log(req.session);
+    console.log(req.session.id);
+
+    req.sessionStore.get(req.session.id, (err, sessionData)=>{
+        if(err){
+            console.log(err);
+            throw err;
+        }
+        console.log(sessionData)
+    })
 
     const result = validationResult(req);
     console.log(result);
