@@ -12,6 +12,7 @@ app.listen(PORT,()=>(
     console.log(`Running at port ${PORT}`)
 ))
 
-app.get('/',(req,res)=>(
+app.get('/',(req,res)=>{
+    res.cookie("hello", "world", {maxAge: 60000})
     res.status(201).send({msg:"Hello"})
-))
+})
