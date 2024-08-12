@@ -44,5 +44,8 @@ app.post("/api/auth", (req,res)=>{
 })
 
 app.get('/api/auth/status', (req,res)=>{
+    req.sessionStore.get(req.sessionID,(err, session)=>{
+        console.log(session)
+    })
     return req.session.user ? res.status(200).send(req.session.user) : res.status(401).send({msg:"Not authenticated"})
 })
