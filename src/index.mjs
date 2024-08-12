@@ -38,4 +38,11 @@ app.post("/api/auth", (req,res)=>{
 
     if(!findUser || findUser.password !== password) 
         return res.status(401).send({msg:"Bad Credentials"});
+
+    req.session.user = findUser;
+    return res.status(200).send(findUser)
+})
+
+app.get('/api/auth/status', (req,res)=>{
+    return req.session.user ? res.status(200).send(req.session.user) : res.status(401).send({msg:"Not authenticated"})
 })
