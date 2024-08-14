@@ -3,7 +3,7 @@ import routes from './routes/index.mjs'
 import cookieParser from "cookie-parser";
 import session from 'express-session'
 import { mockUsers } from "./utils/constants.mjs";
-import { body } from "express-validator";
+import passport from "passport"
 
 const app = express()
 
@@ -17,6 +17,10 @@ app.use(session({
         maxAge: 60000*60,
     }
 }))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use(routes)
 
 const PORT = process.env.PORT || 3000;
@@ -52,7 +56,7 @@ app.get('/api/auth/status', (req,res)=>{
 })
 
 app.post("/api/cart", (req,res)=>{
-    if(!req.session.res) return res.sendStatus(401);
+    if(!req.session.user) return res.sendStatus(401);
 
     const {body:item} = req;
     const {cart} = req.session;
