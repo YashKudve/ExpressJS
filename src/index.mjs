@@ -3,6 +3,7 @@ import routes from './routes/index.mjs'
 import cookieParser from "cookie-parser";
 import session from 'express-session'
 import { mockUsers } from "./utils/constants.mjs";
+import { body } from "express-validator";
 
 const app = express()
 
@@ -48,4 +49,24 @@ app.get('/api/auth/status', (req,res)=>{
         console.log(session)
     })
     return req.session.user ? res.status(200).send(req.session.user) : res.status(401).send({msg:"Not authenticated"})
+})
+
+app.post("/api/cart", (req,res)=>{
+    if(!req.session.res) return res.sendStatus(401);
+
+    const {body:item} = req;
+    const {cart} = req.session;
+
+    if(cart){
+        cart.push(item);
+    } else{
+        req.session.cart = [item];
+    }
+
+    return res.status(201).send(item)
+})
+
+app.get("/api/cart", (req,res)=>{
+    if(!req.session.user) return res.sendStatus(401);
+    return res.send(req.session.cart ?? [])
 })
