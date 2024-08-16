@@ -24,6 +24,10 @@ app.use(passport.session())
 
 app.use(routes)
 
+app.post("/api/auth", passport.authenticate("local"), (req,res)=>{
+    
+})
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT,()=>(
