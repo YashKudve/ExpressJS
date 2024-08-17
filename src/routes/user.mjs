@@ -3,7 +3,7 @@ import { query, validationResult, checkSchema, matchedData } from "express-valid
 import { mockUsers } from "../utils/constants.mjs";
 import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
 import {resolveIndexByUserId} from '../utils/middlewares.mjs'
-import { User } from "../mongoose/schema/user";
+import { User } from "../mongoose/schema/user.mjs";
 
 const router = Router();
 
