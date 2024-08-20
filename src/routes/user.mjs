@@ -78,10 +78,14 @@ router.get("/api/users/:id",resolveIndexByUserId, (req,res)=>{
 
 router.post("/api/users", checkSchema(createUserValidationSchema), async(req,res)=>{
     const result  = validationResult(req)
-    if(!result.isEmpty()) return res.send(result.array())
+    if(!result.isEmpty()) return res.status(400).send(result.array())
 
-    const {body} = req;
-    const newUser = new User(body);
+    // const {body} = req;
+    // const newUser = new User(body);
+
+    const data = matchedData(req);
+    console.log(data);
+    const newUser = new User(data);
     try {
         const savedUser = await newUser.save()
         return res.status(201).send(savedUser)
@@ -119,7 +123,7 @@ router.delete("/api/users/:id", (req, res) => {
 		params: { id },
 	} = req;
 	const parsedId = parseInt(id);
-	if (isNaN(parsedId)) return response.sendStatus(400);
+	if (isNaN(parsedId)) return res.sendStatus(400);
 	const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
 	if (findUserIndex === -1) return res.sendStatus(404);
 	mockUsers.splice(findUserIndex, 1);
