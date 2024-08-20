@@ -25,6 +25,7 @@ router.get('/api/users',
             console.log(err);
             throw err;
         }
+        console.log("Inside session store GET")
         console.log(sessionData)
     })
 
