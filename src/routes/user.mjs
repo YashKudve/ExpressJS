@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { request, Router } from "express";
 import { query, validationResult, checkSchema, matchedData } from "express-validator";
 import { mockUsers } from "../utils/constants.mjs";
 import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
@@ -77,6 +77,9 @@ router.get("/api/users/:id",resolveIndexByUserId, (req,res)=>{
 // })
 
 router.post("/api/users", checkSchema(createUserValidationSchema), async(req,res)=>{
+    const result  = validationResult(req)
+    if(!result.isEmpty()) return res.send(result.array())
+
     const {body} = req;
     const newUser = new User(body);
     try {
