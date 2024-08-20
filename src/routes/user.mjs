@@ -76,7 +76,7 @@ router.get("/api/users/:id",resolveIndexByUserId, (req,res)=>{
 //     return res.status(201).send(newUser)
 // })
 
-router.post("/api/users", async(req,res)=>{
+router.post("/api/users", checkSchema(createUserValidationSchema), async(req,res)=>{
     const {body} = req;
     const newUser = new User(body);
     try {
