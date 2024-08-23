@@ -5,6 +5,7 @@ import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
 import {resolveIndexByUserId} from '../utils/middlewares.mjs'
 import { User } from "../mongoose/schema/user.mjs";
 import { hashPassword } from "../utils/helpers.mjs";
+import { getUserByIdHandler } from "../handlers/users.mjs";
 
 const router = Router();
 
@@ -43,22 +44,7 @@ router.get('/api/users',
     
 })
 
-router.get("/api/users/:id",resolveIndexByUserId, (req,res)=>{
-    // console.log(req.params);
-    const parsedId = parseInt(req.params.id)    
-    console.log(parsedId);
-
-    if (isNaN(parsedId)) {
-        return res.status(400).send(`Bad Request:: Invalid ID`)
-    }
-
-    const findUser = mockUsers.find((user)=>user.id === parsedId)
-
-    if(!findUser) return res.send(`User not found`);
-
-    return res.send(findUser)
-    
-})
+router.get("/api/users/:id",resolveIndexByUserId, getUserById)
 
 // router.post('/api/users',checkSchema(createUserValidationSchema),(req, res)=>{
 //     // console.log(req.body);
