@@ -5,7 +5,7 @@ import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
 import {resolveIndexByUserId} from '../utils/middlewares.mjs'
 import { User } from "../mongoose/schema/user.mjs";
 import { hashPassword } from "../utils/helpers.mjs";
-import { getUserByIdHandler } from "../handlers/users.mjs";
+import { getUserByIdHandler, createUserHandler } from "../handlers/users.mjs";
 
 const router = Router();
 
@@ -64,29 +64,32 @@ router.get("/api/users/:id",resolveIndexByUserId, getUserById)
 //     return res.status(201).send(newUser)
 // })
 
-router.post("/api/users", checkSchema(createUserValidationSchema), async(req,res)=>{
-    const result  = validationResult(req)
-    if(!result.isEmpty()) return res.status(400).send(result.array())
+router.post("/api/users", checkSchema(createUserValidationSchema), 
+createUserHandler
+// async(req,res)=>{
+//     const result  = validationResult(req)
+//     if(!result.isEmpty()) return res.status(400).send(result.array())
 
-    // const {body} = req;
-    // const newUser = new User(body);
+//     // const {body} = req;
+//     // const newUser = new User(body);
 
-    const data = matchedData(req);
-    console.log(data);
+//     const data = matchedData(req);
+//     console.log(data);
 
-    data.password = hashPassword(data.password)
-    console.log(data);
+//     data.password = hashPassword(data.password)
+//     console.log(data);
 
-    const newUser = new User(data);
-    try {
-        const savedUser = await newUser.save()
-        return res.status(201).send(savedUser)
-    } catch (error) {
-        console.log(error);
-        return res.sendStatus(400)        
+//     const newUser = new User(data);
+//     try {
+//         const savedUser = await newUser.save()
+//         return res.status(201).send(savedUser)
+//     } catch (error) {
+//         console.log(error);
+//         return res.sendStatus(400)        
         
-    }
-})
+//     }
+// }
+)
 
 router.patch("/api/users/:id", (req,res)=>{
     const {body, params:{id}} = req;
