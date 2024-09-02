@@ -11,21 +11,14 @@ export const createUserHandler = async(req,res)=>{
     const result  = validationResult(req)
     if(!result.isEmpty()) return res.status(400).send(result.array())
 
-    // const {body} = req;
-    // const newUser = new User(body);
-
     const data = matchedData(req);
-    console.log(data);
-
     data.password = hashPassword(data.password)
-    console.log(data);
-
     const newUser = new User(data);
+
     try {
         const savedUser = await newUser.save()
         return res.status(201).send(savedUser)
     } catch (error) {
-        console.log(error);
         return res.sendStatus(400)        
         
     }

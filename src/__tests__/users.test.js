@@ -1,12 +1,15 @@
 import { getUserByIdHandler } from "../handlers/users.mjs";
 
+jest.mock('express-validator')
+
 const mockRequest = {
     findUserIndex: 1
 };
 
 const mockResponse = {
     sendStatus: jest.fn(),
-    send: jest.fn()
+    send: jest.fn(),
+    status: jest.fn()
 };
 
 describe('get users', ()=>{
@@ -30,4 +33,12 @@ describe('get users', ()=>{
         expect(mockResponse.sendStatus).toHaveBeenCalledTimes(1);
         expect(mockResponse.send).not.toHaveBeenCalled();
     })
+})
+
+describe("create users",()=>{
+    const mockRequest = {}
+
+    const mockResponse = {}
+
+    it("should send a status of 400 when there are errors",()=>{})
 })
