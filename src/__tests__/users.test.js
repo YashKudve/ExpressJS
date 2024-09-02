@@ -1,6 +1,12 @@
+import { validationResult } from "express-validator";
 import { getUserByIdHandler } from "../handlers/users.mjs";
 
-jest.mock('express-validator')
+jest.mock('express-validator', ()=>({
+    validationResult:jest.fn(()=>({
+        isEmpty: jest.fn(()=>false),
+        array:jest.fn(()=>[{msg:"Invalid field"}])
+    }))
+}))
 
 const mockRequest = {
     findUserIndex: 1
