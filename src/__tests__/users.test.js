@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { getUserByIdHandler } from "../handlers/users.mjs";
+import { getUserByIdHandler, createUserHandler } from "../handlers/users.mjs";
 
 jest.mock('express-validator', ()=>({
     validationResult:jest.fn(()=>({
@@ -46,5 +46,7 @@ describe("create users",()=>{
 
     const mockResponse = {}
 
-    it("should send a status of 400 when there are errors",()=>{})
+    it("should send a status of 400 when there are errors",async()=>{
+       await createUserHandler(mockRequest,mockResponse)
+    })
 })
